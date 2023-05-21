@@ -1,4 +1,4 @@
-package com.earthwatch.metadata.controllers.area;
+package com.earthwatch.metadata.area.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

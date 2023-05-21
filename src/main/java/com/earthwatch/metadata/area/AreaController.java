@@ -1,8 +1,9 @@
-package com.earthwatch.metadata.controllers.area;
+package com.earthwatch.metadata.area;
 
-import com.earthwatch.metadata.area.AreaNotFoundException;
-import com.earthwatch.metadata.entities.Area;
-import com.earthwatch.metadata.services.area.AreaService;
+import com.earthwatch.metadata.area.dto.CreateAreaRequest;
+import com.earthwatch.metadata.area.dto.ErrorResponse;
+import com.earthwatch.metadata.area.exception.AreaNotFoundException;
+import com.earthwatch.metadata.entities.AreaEntity;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LinearRing;
@@ -47,27 +48,27 @@ public class AreaController {
 
 //        Polygon polygon = Polygon.fromLngLats(List.of(points));
 
-        Area area = areaService.create(polygon);
+        AreaEntity area = areaService.create(polygon);
         return ResponseEntity
                 .created(URI.create("/areas/" + area.getId()))
                 .body(area);
     }
 
     @GetMapping("/")
-    public final ResponseEntity<List<Area>> list() {
-        List<Area> areas = areaService.getAll();
+    public final ResponseEntity<List<AreaEntity>> list() {
+        List<AreaEntity> areas = areaService.getAll();
         return ResponseEntity.ok(areas);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Area> get(@PathVariable int id) throws AreaNotFoundException {
-        Area area = areaService.getById(id);
+    @GetMapping("/{id}/")
+    public ResponseEntity<AreaEntity> get(@PathVariable int id) throws AreaNotFoundException {
+        AreaEntity area = areaService.getById(id);
         return ResponseEntity.ok(area);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Area> delete(@PathVariable int id) throws AreaNotFoundException{
-        Area area = areaService.deleteById(id);
+    public ResponseEntity<AreaEntity> delete(@PathVariable int id) throws AreaNotFoundException{
+        AreaEntity area = areaService.deleteById(id);
         return ResponseEntity.ok(area);
     }
 

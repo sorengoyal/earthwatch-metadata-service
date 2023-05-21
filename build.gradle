@@ -26,9 +26,12 @@ dependencies {
 
 	// Link
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.modelmapper:modelmapper:3.0.0'
+	//TODO: Implement Security
+	//implementation 'org.springframework.boot:spring-boot-starter-security' // Used for hashing passwords
+	implementation 'org.springframework.security:spring-security-crypto'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//	implementation 'org.postgis:postgis-jdbc:1.3.3'
-	implementation 'org.hibernate:hibernate-spatial'
+	implementation 'org.hibernate:hibernate-spatial' // Used for GIS data
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
 	// Runtime

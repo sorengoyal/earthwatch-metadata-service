@@ -1,4 +1,4 @@
-package com.earthwatch.metadata.area;
+package com.earthwatch.metadata.area.exception;
 
 public class AreaNotFoundException extends Exception {
     public AreaNotFoundException(Throwable cause) {

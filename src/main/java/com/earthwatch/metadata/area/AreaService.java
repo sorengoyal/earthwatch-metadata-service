@@ -1,8 +1,7 @@
-package com.earthwatch.metadata.services.area;
+package com.earthwatch.metadata.area;
 
-import com.earthwatch.metadata.area.AreaNotFoundException;
-import com.earthwatch.metadata.entities.Area;
-import com.earthwatch.metadata.repositories.area.AreaRepository;
+import com.earthwatch.metadata.area.exception.AreaNotFoundException;
+import com.earthwatch.metadata.entities.AreaEntity;
 
 //import org.postgis.Polygon;
 import org.locationtech.jts.geom.Polygon;
@@ -15,23 +14,23 @@ import java.util.Optional;
 @Service
 public class AreaService {
 
-    public Area create(Polygon polygon) {
-        Area area = new Area();
+    public AreaEntity create(Polygon polygon) {
+        AreaEntity area = new AreaEntity();
         area.setGeometry(polygon);
-        Area areaWithId = areaRepository.save(area);
+        AreaEntity areaWithId = areaRepository.save(area);
         return areaWithId;
     }
 
-    public List<Area> getAll() {
-        List<Area> areas = areaRepository.findAll();
+    public List<AreaEntity> getAll() {
+        List<AreaEntity> areas = areaRepository.findAll();
         return areas;
     }
-    public Area update(){
+    public AreaEntity update(){
         throw new UnsupportedOperationException();
     }
 
-    public Area getById(int id) throws AreaNotFoundException {
-        Optional<Area> area = areaRepository.findById(id);
+    public AreaEntity getById(int id) throws AreaNotFoundException {
+        Optional<AreaEntity> area = areaRepository.findById(id);
         if (area.isEmpty()) {
             String msg = String.format("id: %d not found", id);
             throw new AreaNotFoundException(msg);
@@ -39,8 +38,8 @@ public class AreaService {
         return area.get();
     }
 
-    public Area deleteById(int id) throws AreaNotFoundException {
-        Optional<Area> area = areaRepository.findById(id);
+    public AreaEntity deleteById(int id) throws AreaNotFoundException {
+        Optional<AreaEntity> area = areaRepository.findById(id);
         if (area.isEmpty()) {
             String msg = String.format("id: %d not found", id);
             throw new AreaNotFoundException(msg);
@@ -53,7 +52,7 @@ public class AreaService {
     public void deleteTask(int id) {
         throw new UnsupportedOperationException();
     }
-    public Area add(Area area) {
+    public AreaEntity add(AreaEntity area) {
         throw new UnsupportedOperationException();
     }
 
