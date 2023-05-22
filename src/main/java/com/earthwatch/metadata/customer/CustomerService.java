@@ -8,8 +8,10 @@ import com.earthwatch.metadata.customer.dto.LoginCustomerResponse;
 import com.earthwatch.metadata.customer.exceptions.CustomerNotFoundException;
 import com.earthwatch.metadata.customer.exceptions.IncorrectPasswordException;
 import com.earthwatch.metadata.entities.CustomerEntity;
-import com.earthwatch.metadata.customer.CustomerRepository;
+import com.earthwatch.metadata.security.jwt.JwtService;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,6 +19,8 @@ import java.util.Optional;
 @Service
 public class CustomerService {
     public CreateCustomerResponse create(CreateCustomerRequest request) {
+        String password = request.getPassword();
+        request.setPassword(passwordEncoder.encode(password));
         CustomerEntity customer = modelMapper.map(request, CustomerEntity.class);
         CustomerEntity savedCustomer = customerRepository.save(customer);
         CreateCustomerResponse response = modelMapper.map(savedCustomer, CreateCustomerResponse.class);
@@ -29,14 +33,14 @@ public class CustomerService {
             String message = String.format("%s not found", request.getUsername());
             throw new CustomerNotFoundException(message);
         }
-        if (!customer.get().getPassword().equals(request.getPassword())) {
+        Boolean passwordsMatch = passwordEncoder.matches(request.getPassword(), customer.get().getPassword());
+        if (!passwordsMatch) {
             throw new CustomerNotFoundException("Passwords did not match");
         }
         LoginCustomerResponse response = LoginCustomerResponse.builder()
-                .token("Random_token")
+                .jwtToken(jwtService.create(customer.get().getId()))
                 .build();
         return response;
-
     }
 
     public GetCustomerResponse getById(Integer id) throws CustomerNotFoundException {
@@ -48,13 +52,19 @@ public class CustomerService {
         return response;
     }
 
-    public CustomerService(CustomerRepository customerRepository, ModelMapper modelMapper) {
-        this.customerRepository = customerRepository;
-        this.modelMapper = modelMapper;
+    private Boolean matchPassword(String passwordFromCustomer, String encodedPasswordFromDb) {
+        return passwordEncoder.matches(passwordFromCustomer, encodedPasswordFromDb);
+
     }
 
+    @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtService jwtService;
 }
 // Testing solutions
 // @DataJpaTest -> only for repos

@@ -8,7 +8,7 @@ spring:
     password: 123456
   jpa:
     hibernate:
-      ddl-auto: create # create the db on the first run, and updates it in subsequent
+      ddl-auto: update # "create" the db on the first run, and updates it in subsequent. "update" does not create empty db ont eh first run
     show-sql: true
     properties:
       hibernate:

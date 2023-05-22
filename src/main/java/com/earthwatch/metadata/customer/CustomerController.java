@@ -36,11 +36,11 @@ public class CustomerController {
             LoginCustomerResponse response = customerService.login(request);
             return ResponseEntity.ok().body(response);
         }
-        catch (CustomerNotFoundException e) {
+        catch (CustomerNotFoundException e) { //404
             System.out.println(e);
             return ResponseEntity.badRequest().body("Either username or password is incorrect");
         }
-        catch (IncorrectPasswordException e) {
+        catch (IncorrectPasswordException e) { //403
             System.out.println(e);
             return ResponseEntity.badRequest().body("Either username or password is incorrect");
         }
