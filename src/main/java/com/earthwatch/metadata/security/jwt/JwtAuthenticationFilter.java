@@ -20,7 +20,6 @@ public class JwtAuthenticationFilter extends AuthenticationFilter {
     public JwtAuthenticationFilter(JwtService jwtService) {
         super(new JwtAuthenticationManager(jwtService), new JwtAuthenticationConverter());
         setSuccessHandler(((request, response, authentication) -> {SecurityContextHolder.getContext().setAuthentication(authentication);}));
-//        setSuccessHandler(new SimpleUrlAuthenticationSuccessHandler());
     }
 
     static class JwtAuthenticationConverter implements AuthenticationConverter {

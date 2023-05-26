@@ -13,5 +13,5 @@ import lombok.Setter;
 @Setter
 public class LoginCustomerResponse {
 
-    public String jwtToken;
+    public String token;
 }

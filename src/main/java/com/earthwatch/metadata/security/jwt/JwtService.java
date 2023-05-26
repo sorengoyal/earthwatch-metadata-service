@@ -34,6 +34,5 @@ public class JwtService {
         JWTVerifier verifier = JWT.require(algorithm).build();
          DecodedJWT decodedJWT = verifier.verify(jwt);
          return decodedJWT;
-
     }
 }

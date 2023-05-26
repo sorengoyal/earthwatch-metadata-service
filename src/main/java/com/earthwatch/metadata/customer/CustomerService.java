@@ -8,6 +8,8 @@ import com.earthwatch.metadata.customer.dto.LoginCustomerResponse;
 import com.earthwatch.metadata.customer.exceptions.CustomerNotFoundException;
 import com.earthwatch.metadata.customer.exceptions.IncorrectPasswordException;
 import com.earthwatch.metadata.entities.CustomerEntity;
+import com.earthwatch.metadata.security.AuthType;
+import com.earthwatch.metadata.security.authtokens.AuthTokenService;
 import com.earthwatch.metadata.security.jwt.JwtService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,7 @@ public class CustomerService {
         return response;
     }
 
-    public LoginCustomerResponse login(LoginCustomerRequest request) throws CustomerNotFoundException, IncorrectPasswordException {
+    public LoginCustomerResponse login(LoginCustomerRequest request, AuthType authType) throws CustomerNotFoundException, IncorrectPasswordException {
         Optional<CustomerEntity> customer = customerRepository.findByUsername(request.getUsername());
         if (customer.isEmpty()) {
             String message = String.format("%s not found", request.getUsername());
@@ -37,8 +39,14 @@ public class CustomerService {
         if (!passwordsMatch) {
             throw new CustomerNotFoundException("Passwords did not match");
         }
+        String token;
+        switch(authType) {
+            case JWT -> token = jwtService.create(customer.get().getId());
+            case AUTH_TOKEN -> token = authTokenService.createAuthToken(customer.get()).toString();
+            default -> token = null;
+        }
         LoginCustomerResponse response = LoginCustomerResponse.builder()
-                .jwtToken(jwtService.create(customer.get().getId()))
+                .token(token)
                 .build();
         return response;
     }
@@ -65,6 +73,8 @@ public class CustomerService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private JwtService jwtService;
+    @Autowired
+    private AuthTokenService authTokenService;
 }
 // Testing solutions
 // @DataJpaTest -> only for repos
