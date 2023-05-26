@@ -59,22 +59,24 @@ public class GeoMonitorService {
         return response;
     }
 
-    public List<GeoMonitorEntity> listByOwnerId(Integer ownerid) throws CustomerNotFoundException {
-        Optional<CustomerEntity> customer = customerRepository.findById(ownerid);
-        if (customer.isEmpty()) {
-            String message = String.format("No customer exists with id: %d", ownerid);
-            throw new CustomerNotFoundException(message);
-        }
-        return customer.get().getGeoMonitors();
+    public List<GeoMonitorEntity> listByOwnerId(Integer ownerId) throws CustomerNotFoundException {
+        List<GeoMonitorEntity> geomonitors = geoMonitorRepository.findByOwnerId(ownerId);
+        return geomonitors;
     }
 
-    public List<GeoMonitorEntity> listByAreaId(Integer areaId) throws AreaNotFoundException{
+    public List<GeoMonitorEntity> listByAreaId(Integer areaId, Integer ownerId) throws AreaNotFoundException {
         Optional<AreaEntity> area = areaRepository.findById(areaId);
         if (area.isEmpty()) {
             String message = String.format("No area exists with id: %d", areaId);
             throw new AreaNotFoundException(message);
         }
-        return area.get().getGeoMonitors();
+        if (area.get().getOwner().getId() != ownerId) {
+            System.out.println(String.format("Customer %d is not allowed to access Area %d", ownerId, areaId));
+            String message = String.format("No area exists with id: %d", areaId);
+            throw new AreaNotFoundException(message);
+        }
+        List<GeoMonitorEntity> geomonitors = geoMonitorRepository.findByAreaId(areaId);
+        return geomonitors;
     }
 
     public GeoMonitorEntity getById(Integer id) throws GeoMonitorNotFoundException {

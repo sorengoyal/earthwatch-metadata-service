@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import java.util.List;
 
 @Entity(name = "customers")
@@ -22,6 +23,10 @@ public class CustomerEntity extends BaseEntity{
     @Column(name = "password", nullable = true, length = 100)
     String password;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<GeoMonitorEntity> geoMonitors;
+//    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<GeoMonitorEntity> geoMonitors;
+
+//    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<AreaEntity> areas;
+
 }

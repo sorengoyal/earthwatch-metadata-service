@@ -10,7 +10,8 @@ import java.util.Date;
 @Getter
 public abstract class BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "base_seq")
+    @SequenceGenerator(name = "BASE_SEQ", sequenceName = "BASE_SEQ", allocationSize = 1, initialValue = 1)
     @Column(name = "id", nullable = false)
     private Integer id;
 

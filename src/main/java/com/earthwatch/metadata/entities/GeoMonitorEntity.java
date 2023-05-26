@@ -13,6 +13,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 
 
 @Entity(name = "geomonitors")
@@ -32,7 +33,7 @@ public class GeoMonitorEntity extends BaseEntity {
     private GeoMonitorType geoMonitorType;
 
 //    @Column(name = "owner", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private CustomerEntity owner;
 
 }

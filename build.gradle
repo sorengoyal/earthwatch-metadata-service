@@ -28,9 +28,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.modelmapper:modelmapper:3.0.0'
 	//TODO: Implement Security
-	//implementation 'org.springframework.boot:spring-boot-starter-security' // Used for hashing passwords
-	implementation 'com.auth0:java-jwt:4.4.0'
-	implementation 'org.springframework.security:spring-security-crypto'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'com.auth0:java-jwt:4.4.0' // Used for JWT creation and decoding
+	implementation 'org.springframework.security:spring-security-crypto' // Used for hashing passwords
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.hibernate:hibernate-spatial' // Used for GIS data
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'

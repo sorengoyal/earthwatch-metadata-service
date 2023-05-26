@@ -9,7 +9,10 @@ import org.locationtech.jts.geom.Polygon;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +25,10 @@ public class AreaEntity extends BaseEntity {
     @JsonSerialize(using = JTSPolygonSerializer.class)
     private Polygon geometry;
 
-    @OneToMany(mappedBy = "area", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<GeoMonitorEntity> geoMonitors = new ArrayList<>();
+//    @OneToMany(mappedBy = "area", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<GeoMonitorEntity> geoMonitors = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private CustomerEntity owner;
 }
 

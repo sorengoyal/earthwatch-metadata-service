@@ -25,9 +25,15 @@ public class JwtService {
     }
 
     public Integer getUserIdFromToken(String jwt) {
-        JWTVerifier verifier = JWT.require(algorithm).build();
-        DecodedJWT decodedJWT = verifier.verify(jwt);
+        DecodedJWT decodedJWT = JWT.decode(jwt);
         String subject = decodedJWT.getSubject();
         return Integer.parseInt(subject);
+    }
+
+    public DecodedJWT authenticateToken(String jwt) {
+        JWTVerifier verifier = JWT.require(algorithm).build();
+         DecodedJWT decodedJWT = verifier.verify(jwt);
+         return decodedJWT;
+
     }
 }

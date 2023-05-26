@@ -9,6 +9,7 @@ import com.earthwatch.metadata.geomonitor.dto.GetGeoMonitorResponse;
 import com.earthwatch.metadata.geomonitor.exceptions.GeoMonitorNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,11 +42,11 @@ public class GeoMonitorController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> list(@RequestParam(required = false) Integer ownerId,
+    public ResponseEntity<?> list(@AuthenticationPrincipal Integer customerId,
                                   @RequestParam(required = false) Integer areaId) {
         if (areaId != null) {
             try {
-                List<GetGeoMonitorResponse> geoMonitors = geoMonitorService.listByAreaId(areaId)
+                List<GetGeoMonitorResponse> geoMonitors = geoMonitorService.listByAreaId(areaId, customerId)
                         .stream()
                         .map(this::convertToGetGeoMonitorResponse)
                         .toList();
@@ -56,9 +57,9 @@ public class GeoMonitorController {
                 return ResponseEntity.badRequest().body(e.getMessage());
             }
         }
-        else if (ownerId != null) {
+        else {
             try {
-                List<GetGeoMonitorResponse> geoMonitors = geoMonitorService.listByOwnerId(ownerId)
+                List<GetGeoMonitorResponse> geoMonitors = geoMonitorService.listByOwnerId(customerId)
                         .stream()
                         .map(this::convertToGetGeoMonitorResponse)
                         .toList();
@@ -68,9 +69,6 @@ public class GeoMonitorController {
             catch (CustomerNotFoundException e) {
                 return ResponseEntity.badRequest().body(e.getMessage());
             }
-        }
-        else {
-            return ResponseEntity.badRequest().body("Invalid parameter");
         }
     }
 
